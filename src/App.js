@@ -11,17 +11,18 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CardHeader from '@mui/material/CardHeader';
 import Map from './components/Map'
-import { apiUrl, apiKey } from './api';
+import { apiUrl } from './api';
+
 // lon = -0.1278
 // lat = 51.5074
 // `${apiUrl}/weather?lat=${lat}&lon=${lon}&exclude=daily&appid=${apiKey}
 
 function App() {
 
-  const fetchData = `${apiUrl}/weather?lat=51.5085&lon=-0.1278&units=metric&appid=${apiKey}`
-  // https://api.openweathermap.org/data/2.5/weather?lat=51.5085&lon=-0.1257&appid=16b21b2912c2dd639e7b17a9c275920c
+  const fetchData = `${apiUrl}/weather?lat=51.5085&lon=-0.1278&units=metric&appid=${process.env.REACT_APP_API_KEY}`
+  // https://api.openweathermap.org/data/2.5/weather?lat=51.5085&lon=-0.1257&appid=KEY
 
-  console.log(fetchData)
+  // console.log(fetchData)
 
   const [currentWeather, setCurrentWeather] = useState({ data: null })
 
@@ -93,10 +94,9 @@ function App() {
               }}>
               <CardContent>
                 <CardHeader
-                  title="Praha"
-                  subheader="dnes"
+                  title={currentWeather.data?.name}
+                  subheader="Today"
                 />
-                Pocasi
                 <CardMedia
                   component="img"
                   style={{
