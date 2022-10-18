@@ -23,6 +23,8 @@ function App() {
 
   console.log(fetchData)
 
+  console.log('hello', process.env.REACT_APP_NOT_SECRET_CODE)
+
   const [currentWeather, setCurrentWeather] = useState({ data: null })
 
   useEffect(() => {
