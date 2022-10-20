@@ -1,18 +1,23 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from "@mui/material/InputAdornment";
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl';
 import Autocomplete from '@mui/material/Autocomplete';
+
 import { fetchWeather, geocodeCity } from '../api';
+
+import WeatherInfoCard from './WeatherInfoCard';
 
 function SearchPlaceElement() {
     const [weather, setWeather] = useState({})
     const [city, setCity] = useState({})
     const [inputValue, setInputValue] = useState('')
 
-    const handleClick = async() => {
+    const [showCard, setShowCard] = useState(false);
+
+    const handleClick = async () => {
         const city = (await geocodeCity(inputValue))?.[0]
         if (!city) {
             alert('city not found')
@@ -24,6 +29,8 @@ function SearchPlaceElement() {
         const weather = await fetchWeather(city.lat, city.lon);
         console.log(weather)
         setWeather(weather)
+
+        setShowCard(true)
     }
 
     const handleChange = (e) => {
@@ -47,10 +54,18 @@ function SearchPlaceElement() {
                     onClick={handleClick}>
                     Hledej
                 </Button>
+
+                <div>
+                    {showCard === true &&
+                        <WeatherInfoCard
+                            city={city}
+                            weather={weather}
+                        />}
+                </div>
+
+
             </FormControl>
 
-            <div>{city?.name} {city?.country}</div>
-            <div>Temperature {weather?.main?.temp} °C</div>
 
         </>
     )

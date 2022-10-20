@@ -1,25 +1,22 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
-import SearchIcon from '@mui/icons-material/Search';
-import InputAdornment from "@mui/material/InputAdornment";
-import Input from '@mui/material/Input';
-import Button from '@mui/material/Button'
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CardHeader from '@mui/material/CardHeader';
+
 import Map from './components/Map'
 import SearchPlaceElement from './components/SearchPlaceElement';
+import WeatherInfoCard from './components/WeatherInfoCard';
 import { apiUrl } from './api';
 
 // lon = -0.1278
 // lat = 51.5074
 // `${apiUrl}/weather?lat=${lat}&lon=${lon}&exclude=daily&appid=${apiKey}
 
-function App({inputValue, currentWeather, result}) {
+function App() {
 
 
   return (
@@ -55,14 +52,12 @@ function App({inputValue, currentWeather, result}) {
           >
 
             <Grid>
-              <SearchPlaceElement 
-              inputValue={inputValue}
-              currentWeather={currentWeather}
-              result={result}
+              <SearchPlaceElement
+                // inputValue={inputValue}
               />
             </Grid>
 
-            <Card
+            {/* <Card
               style={{
                 marginLeft: '20px',
                 marginRight: '20px',
@@ -87,7 +82,13 @@ function App({inputValue, currentWeather, result}) {
                   alt="Weather animation"
                 />
               </CardContent>
-            </Card>
+            </Card> */}
+
+            {/* <WeatherInfoCard 
+            city={city}
+            weather={weather}
+            /> */}
+
 
           </Grid>
         </Grid>
