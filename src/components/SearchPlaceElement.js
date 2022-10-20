@@ -5,45 +5,30 @@ import Input from '@mui/material/Input';
 import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl';
 import Autocomplete from '@mui/material/Autocomplete';
-import { apiUrl } from '../api';
+import { fetchWeather, geocodeCity } from '../api';
 
-// ${inputValue}
 function SearchPlaceElement() {
-    const [currentWeather, setCurrentWeather] = useState({ data: null })
+    const [weather, setWeather] = useState({})
+    const [city, setCity] = useState({})
     const [inputValue, setInputValue] = useState('')
-    const [result, setResult] = useState()
 
-    const weatherUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${inputValue}&limit=5&appid=${process.env.REACT_APP_API_KEY}`
-    console.log(weatherUrl);
+    const handleClick = async() => {
+        const city = (await geocodeCity(inputValue))?.[0]
+        if (!city) {
+            alert('city not found')
+            return
+        }
+        console.log(city)
+        setCity(city)
 
-    const fetchData = `${apiUrl}/weather?lat=${result?.[0].lat}&lon=${result?.[0].lon}&units=metric&appid=${process.env.REACT_APP_API_KEY}`
-    console.log(fetchData)
-
-    const HandleClick = async() => {
-        const res = await fetch(weatherUrl);
-        const data = await res.json();
-        setResult(data);
+        const weather = await fetchWeather(city.lat, city.lon);
+        console.log(weather)
+        setWeather(weather)
     }
-
-    useEffect(() => {
-        fetch(fetchData, {
-            method: "GET",
-        }).then(async (response) => {
-            const responseJson = await response.json();
-            setCurrentWeather({ data: responseJson });
-        });
-        // console.log(currentWeather.data)
-    }, []);
-
-    console.log(currentWeather.data)
-    console.log(currentWeather.data?.main?.temp)
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
-        
-    };
-
-    console.log(inputValue)
+    }
 
     return (
         <>
@@ -59,13 +44,13 @@ function SearchPlaceElement() {
                     }
                 />
                 <Button
-                    onClick={HandleClick}>
+                    onClick={handleClick}>
                     Hledej
                 </Button>
             </FormControl>
 
-            <div>{result?.[0]?.name} {result?.[0]?.country}</div>
-            <div>Temperature {currentWeather.data?.main?.temp} °C</div>
+            <div>{city?.name} {city?.country}</div>
+            <div>Temperature {weather?.main?.temp} °C</div>
 
         </>
     )
