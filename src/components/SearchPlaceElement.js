@@ -60,6 +60,7 @@ function SearchPlaceElement() {
                         <WeatherInfoCard
                             city={city}
                             weather={weather}
+
                         />}
                 </div>
 

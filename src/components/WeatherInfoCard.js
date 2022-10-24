@@ -4,6 +4,13 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CardHeader from '@mui/material/CardHeader';
 
+const weatherIcons = {
+    '02n': '/weather_icons/animated/cloudy-day-1.svg',
+    '50d': '/weather_icons/animated/cloudy.svg',
+    '01d': '/weather_icons/animated/day.svg',
+    '01n': '/weather_icons/animated/night.svg'
+}
+
 function WeatherInfoCard({city, weather}) {
     return (
         <>
@@ -29,7 +36,7 @@ function WeatherInfoCard({city, weather}) {
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         }}
-                        image="/weather_icons/animated/rainy-3.svg"
+                        image={weatherIcons[weather?.weather[0]?.icon]}
                         alt="Weather animation"
                     />
 
