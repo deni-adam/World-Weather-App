@@ -8,8 +8,8 @@ mapboxgl.accessToken =
 function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lon, setLon] = useState(14);
-  const [lat, setLat] = useState(50);
+  const [lon, setLon] = useState(14.4378);
+  const [lat, setLat] = useState(50.0755);
   const [zoom, setZoom] = useState(2);
   const marker = useRef(null);
 
@@ -24,6 +24,8 @@ function Map() {
 
     // Add zoom and rotation controls to the map.
     map.current.addControl(new mapboxgl.NavigationControl());
+
+    showMarker()
   }, []);
 
   const showMarker = () => {
@@ -33,8 +35,15 @@ function Map() {
       marker.current = new mapboxgl.Marker({
         draggable: true,
       })
-        .setLngLat([14.4378, 50.0755])
-        .addTo(map.current);
+        .setLngLat([lon, lat])
+        .addTo(map.current)
+        .on('dragend', () => {
+          const newCoords = marker.current.getLngLat()
+          console.log({ newCoords })
+
+          setLon(newCoords.lng)
+          setLat(newCoords.lat)
+        })
     }
   };
 
@@ -54,7 +63,8 @@ function Map() {
     <>
       <button onClick={showMarker}>zobrazit bod</button>
       <button onClick={removeMarker}>skryt bod</button>
-
+      current coords: <br/>
+      Latitude: {lat}, Longitude: {lon}
       <div
         ref={mapContainer}
         className="map-container"
