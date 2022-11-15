@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYWRhZGU2IiwiYSI6ImNsOThmcTdibzA2b2gzd3A4M2MxdnI0NDIifQ.BuN219pi4oXWr46bZ0hkvA";
@@ -24,6 +25,14 @@ function Map() {
 
     // Add zoom and rotation controls to the map.
     map.current.addControl(new mapboxgl.NavigationControl());
+
+    // Add the control to the map.
+    // map.current.addControl(
+    //   new MapboxGeocoder({
+    //     accessToken: mapboxgl.accessToken,
+    //     mapboxgl: mapboxgl,
+    //   })
+    // );
   }, []);
 
   const showMarker = () => {
@@ -37,8 +46,6 @@ function Map() {
         .addTo(map.current);
     }
   };
-
-  console.log(lon, lat);
 
   const removeMarker = () => {
     if (map.current) {

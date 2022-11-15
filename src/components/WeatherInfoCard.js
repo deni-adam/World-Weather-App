@@ -39,10 +39,13 @@ function WeatherInfoCard({ city, weather }) {
         // currentWeather={currentWeather}
         >
           <CardHeader
-            title={city?.name}
-            //   {{city?.name} {city?.country}}
+            // title={{city?.[0].name} {city?.[0].country}}
             subheader="Today"
           />
+
+          <div>
+            {city?.[0].name} {city?.[0].country}
+          </div>
           <CardMedia
             component="img"
             style={{

@@ -1,75 +1,95 @@
-import React, { useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
-import Input from '@mui/material/Input';
-import Button from '@mui/material/Button'
-import FormControl from '@mui/material/FormControl';
-import Autocomplete from '@mui/material/Autocomplete';
+import Input from "@mui/material/Input";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
-import { fetchWeather, geocodeCity } from '../api';
+import { cityAutocomplete, fetchWeather, geocodeCity } from "../api";
 
-import WeatherInfoCard from './WeatherInfoCard';
+import WeatherInfoCard from "./WeatherInfoCard";
 
 function SearchPlaceElement() {
-    const [weather, setWeather] = useState({})
-    const [city, setCity] = useState({})
-    const [inputValue, setInputValue] = useState('')
+  const [weather, setWeather] = useState({});
+  const [city, setCity] = useState({});
+  const [inputValue, setInputValue] = useState("");
+  const [value, setValue] = useState(null);
+  const [option, setOption] = useState(null);
+  const [address, setAddress] = useState("");
 
-    const [showCard, setShowCard] = useState(false);
+  // console.log(value);
+  // console.log(value?.label);
 
-    const handleClick = async () => {
-        const city = (await geocodeCity(inputValue))?.[0]
-        if (!city) {
-            alert('city not found')
-            return
-        }
-        console.log(city)
-        setCity(city)
+  // const options = ["London", "Oslo", "Tokio", "Perth", "Boston"];
 
-        const weather = await fetchWeather(city.lat, city.lon);
-        console.log(weather)
-        setWeather(weather)
+  const optionsList = address.map((option, index) => ({
+    id: index + 1,
+    label: option,
+  }));
 
-        setShowCard(true)
+  const [showCard, setShowCard] = useState(false);
+
+  const handleClick = async () => {
+    const city = await geocodeCity(value?.label);
+
+    if (!city) {
+      alert("city not found");
+      return;
     }
 
-    const handleChange = (e) => {
-        setInputValue(e.target.value);
-    }
+    setCity(city);
 
-    return (
-        <>
-            <FormControl variant="standard">
-                <Input
-                    id="input-with-icon-adornment"
-                    style={{ paddingTop: '20px' }}
-                    onChange={handleChange}
-                    startAdornment={
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    }
-                />
-                <Button
-                    onClick={handleClick}>
-                    Hledej
-                </Button>
+    // console.log({ "city api": city });
+    // console.log(city?.[0].lat);
+    // console.log(city?.[0].lat);
 
-                <div>
-                    {showCard === true &&
-                        <WeatherInfoCard
-                            city={city}
-                            weather={weather}
+    const weather = await fetchWeather(city?.[0].lat, city?.[0].lon);
+    // console.log(weather);
+    setWeather(weather);
 
-                        />}
-                </div>
+    setShowCard(true);
+  };
 
+  const handleChange = async (e) => {
+    setInputValue(e.target.value);
+    console.log(inputValue);
 
-            </FormControl>
+    const address = await cityAutocomplete(inputValue);
+    console.log(address);
 
+    setAddress(address);
+  };
 
-        </>
-    )
+  return (
+    <>
+      <FormControl variant="standard">
+        <Autocomplete
+          options={optionsList}
+          value={option}
+          renderInput={(params) => (
+            <TextField {...params} label="Find a location" fullWidth />
+          )}
+          sx={{ width: 300, marginTop: 5 }}
+          // onChange={(event, newValue) => {
+          //   setOption(newValue ? [newValue, ...option] : option);
+          //   setValue(newValue);
+          //   console.log(newValue);
+          // } }
+          onChange={handleChange}
+        />
+
+        <Button onClick={handleClick}>Hledej</Button>
+
+        <div>
+          {showCard === true && (
+            <WeatherInfoCard city={city} weather={weather} />
+          )}
+        </div>
+      </FormControl>
+    </>
+  );
 }
 
 export default SearchPlaceElement;
