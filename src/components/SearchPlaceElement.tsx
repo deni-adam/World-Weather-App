@@ -4,8 +4,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl';
-import Autocomplete from '@mui/material/Autocomplete';
-
 import { fetchWeather, geocodeCity } from '../api';
 
 import WeatherInfoCard from './WeatherInfoCard';

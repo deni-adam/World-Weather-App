@@ -10,15 +10,8 @@ import CardHeader from '@mui/material/CardHeader';
 import Map from './components/Map'
 import SearchPlaceElement from './components/SearchPlaceElement';
 import WeatherInfoCard from './components/WeatherInfoCard';
-import { apiUrl } from './api';
-
-// lon = -0.1278
-// lat = 51.5074
-// `${apiUrl}/weather?lat=${lat}&lon=${lon}&exclude=daily&appid=${apiKey}
 
 function App() {
-
-
   return (
     <div className="App">
 
