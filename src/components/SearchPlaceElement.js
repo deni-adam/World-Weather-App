@@ -14,10 +14,8 @@ import WeatherInfoCard from "./WeatherInfoCard";
 function SearchPlaceElement() {
   const [weather, setWeather] = useState({});
   const [city, setCity] = useState({});
-  const [inputValue, setInputValue] = useState("");
-  const [value, setValue] = useState(null);
-  const [option, setOption] = useState(null);
-  const [address, setAddress] = useState("");
+  const [value, setValue] = useState("");
+  const [address, setAddress] = useState([]);
 
   // console.log(value);
   // console.log(value?.label);
@@ -26,13 +24,13 @@ function SearchPlaceElement() {
 
   const optionsList = address.map((option, index) => ({
     id: index + 1,
-    label: option,
+    label: option.name,
   }));
 
   const [showCard, setShowCard] = useState(false);
 
-  const handleClick = async () => {
-    const city = await geocodeCity(value?.label);
+  const handleClick = async (cityName) => {
+    const city = await geocodeCity(cityName);
 
     if (!city) {
       alert("city not found");
@@ -41,7 +39,7 @@ function SearchPlaceElement() {
 
     setCity(city);
 
-    // console.log({ "city api": city });
+    console.log({ "city api": city });
     // console.log(city?.[0].lat);
     // console.log(city?.[0].lat);
 
@@ -53,13 +51,30 @@ function SearchPlaceElement() {
   };
 
   const handleChange = async (e) => {
-    setInputValue(e.target.value);
-    console.log(inputValue);
+    setValue(e.target.value);
+    console.log(e.target.value);
 
-    const address = await cityAutocomplete(inputValue);
+    const address = await cityAutocomplete(e.target.value);
     console.log(address);
+    console.log(
+      address.results
+        .filter((location) => {
+          if (typeof location === "undefined") {
+            return false;
+          } else {
+            return true;
+          }
+        })
+        .map((result) => {
+          return result?.city;
+        })
+    );
 
-    setAddress(address);
+    setAddress(
+      address.results.map((result) => {
+        return { name: `${result.city ?? result.district}, ${result.country}` };
+      })
+    );
   };
 
   return (
@@ -67,20 +82,23 @@ function SearchPlaceElement() {
       <FormControl variant="standard">
         <Autocomplete
           options={optionsList}
-          value={option}
+          value={value}
+          onChange={(params, value) => {
+            setValue(value.label);
+            handleClick(value.label);
+          }}
           renderInput={(params) => (
-            <TextField {...params} label="Find a location" fullWidth />
+            <TextField
+              {...params}
+              onChange={handleChange}
+              label="Find a location"
+              fullWidth
+            />
           )}
           sx={{ width: 300, marginTop: 5 }}
-          // onChange={(event, newValue) => {
-          //   setOption(newValue ? [newValue, ...option] : option);
-          //   setValue(newValue);
-          //   console.log(newValue);
-          // } }
-          onChange={handleChange}
         />
 
-        <Button onClick={handleClick}>Hledej</Button>
+        {/* <Button onClick={handleClick}>Hledej</Button> */}
 
         <div>
           {showCard === true && (
