@@ -17,15 +17,6 @@ function SearchPlaceElement() {
   const [value, setValue] = useState("");
   const [address, setAddress] = useState([]);
 
-  // console.log(value);
-  // console.log(value?.label);
-
-  // const options = ["London", "Oslo", "Tokio", "Perth", "Boston"];
-
-  const optionsList = address.map((option, index) => ({
-    id: index + 1,
-    label: option.name,
-  }));
 
   const [showCard, setShowCard] = useState(false);
 
@@ -40,52 +31,59 @@ function SearchPlaceElement() {
     setCity(city);
 
     console.log({ "city api": city });
-    // console.log(city?.[0].lat);
-    // console.log(city?.[0].lat);
 
     const weather = await fetchWeather(city?.[0].lat, city?.[0].lon);
-    // console.log(weather);
     setWeather(weather);
-
     setShowCard(true);
   };
 
   const handleChange = async (e) => {
-    setValue(e.target.value);
-    console.log(e.target.value);
+    const inputValue = e.target.value
+    setValue(inputValue);
 
-    const address = await cityAutocomplete(e.target.value);
-    console.log(address);
-    console.log(
+    if (inputValue) {
+      const address = await cityAutocomplete(inputValue);
+
+
+      const addressResults = []
       address.results
-        .filter((location) => {
-          if (typeof location === "undefined") {
-            return false;
-          } else {
-            return true;
+        .filter(result => {
+          // filter out all results that don't have city nor district defined -> this will avoid having `undefined` in the options
+          if (!result.city && !result.district) {
+            return false
+          }
+          return true
+        })
+        .forEach(result => {
+          const name = `${result.city ?? result.district}, ${result.country}`
+
+          // if `name` doesn't exist yet, add it to array - this is to prevent duplicate values
+          // -1 is returned when record is not found in the array
+          const alreadyExists = addressResults.findIndex(item => item.name === name) !== -1
+          if (!alreadyExists) {
+            addressResults.push({ name: `${result.city ?? result.district}, ${result.country}` })
           }
         })
-        .map((result) => {
-          return result?.city;
-        })
-    );
 
-    setAddress(
-      address.results.map((result) => {
-        return { name: `${result.city ?? result.district}, ${result.country}` };
-      })
-    );
+        setAddress(addressResults);
+      }
   };
 
   return (
     <>
       <FormControl variant="standard">
         <Autocomplete
-          options={optionsList}
+          options={address.map((option) => ({
+            label: option.name,
+          }))}
           value={value}
           onChange={(params, value) => {
-            setValue(value.label);
-            handleClick(value.label);
+            const inputValue = value?.label ?? ''
+            setValue(inputValue);
+
+            if (inputValue) {
+              handleClick(inputValue);
+            }
           }}
           renderInput={(params) => (
             <TextField
