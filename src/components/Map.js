@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import { MapContext } from "../App";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYWRhZGU2IiwiYSI6ImNsOThmcTdibzA2b2gzd3A4M2MxdnI0NDIifQ.BuN219pi4oXWr46bZ0hkvA";
@@ -9,17 +9,18 @@ mapboxgl.accessToken =
 function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lon, setLon] = useState(14.4378);
-  const [lat, setLat] = useState(50.0755);
+  // const [lon, setLon] = useState(14.4378);
+  // const [lat, setLat] = useState(50.0755);
   const [zoom, setZoom] = useState(2);
   const marker = useRef(null);
+  const { mapLat, mapLon, setMapLon, setMapLat } = useContext(MapContext);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [lon, lat],
+      center: [mapLon, mapLat],
       zoom: zoom,
     });
 
@@ -42,15 +43,15 @@ function Map() {
       marker.current = new mapboxgl.Marker({
         draggable: true,
       })
-        .setLngLat([lon, lat])
+        .setLngLat([mapLon, mapLat])
         .addTo(map.current)
-        .on('dragend', () => {
-          const newCoords = marker.current.getLngLat()
-          console.log({ newCoords })
+        .on("dragend", () => {
+          const newCoords = marker.current.getLngLat();
+          console.log({ newCoords });
 
-          setLon(newCoords.lng)
-          setLat(newCoords.lat)
-        })
+          setMapLon(newCoords.lng);
+          setMapLat(newCoords.lat);
+        });
     }
   };
 
@@ -68,8 +69,8 @@ function Map() {
     <>
       <button onClick={showMarker}>zobrazit bod</button>
       <button onClick={removeMarker}>skryt bod</button>
-      current coords: <br/>
-      Latitude: {lat}, Longitude: {lon}
+      current coords: <br />
+      Latitude: {mapLat}, Longitude: {mapLon}
       <div
         ref={mapContainer}
         className="map-container"
