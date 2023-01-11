@@ -11,7 +11,7 @@ function Map() {
   const map = useRef(null);
   // const [lon, setLon] = useState(14.4378);
   // const [lat, setLat] = useState(50.0755);
-  const [zoom, setZoom] = useState(2);
+  const [zoom, setZoom] = useState(8);
   const marker = useRef(null);
   const { mapLat, mapLon, setMapLon, setMapLat } = useContext(MapContext);
 
@@ -26,24 +26,21 @@ function Map() {
 
     // Add zoom and rotation controls to the map.
     map.current.addControl(new mapboxgl.NavigationControl());
-
-    // Add the control to the map.
-    // map.current.addControl(
-    //   new MapboxGeocoder({
-    //     accessToken: mapboxgl.accessToken,
-    //     mapboxgl: mapboxgl,
-    //   })
-    // );
   }, []);
 
-  const showMarker = () => {
+  useEffect(() => {
+    removeMarker()
+    showMarker(mapLat, mapLon)
+  }, [mapLat, mapLon])
+
+  const showMarker = (lat, lon) => {
     // if map is defined and marker is not yet there
     if (map.current && !marker.current) {
       // add marker
       marker.current = new mapboxgl.Marker({
         draggable: true,
       })
-        .setLngLat([mapLon, mapLat])
+        .setLngLat([lon, lat])
         .addTo(map.current)
         .on("dragend", () => {
           const newCoords = marker.current.getLngLat();
@@ -52,6 +49,9 @@ function Map() {
           setMapLon(newCoords.lng);
           setMapLat(newCoords.lat);
         });
+
+        // move the map to the marker location
+        map.current.setCenter([lon, lat]);
     }
   };
 
@@ -67,10 +67,6 @@ function Map() {
 
   return (
     <>
-      <button onClick={showMarker}>zobrazit bod</button>
-      <button onClick={removeMarker}>skryt bod</button>
-      current coords: <br />
-      Latitude: {mapLat}, Longitude: {mapLon}
       <div
         ref={mapContainer}
         className="map-container"
