@@ -6,6 +6,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 // import CardContent from "@mui/material/CardContent";
 // import CardMedia from "@mui/material/CardMedia";
 // import CardHeader from "@mui/material/CardHeader";
+import "./index.css";
 
 import Map from "./components/Map";
 import SearchPlaceElement from "./components/SearchPlaceElement";
@@ -24,8 +25,8 @@ function App() {
   const [mapLat, setMapLat] = useState(50.0755);
 
   return (
-    <div className="App">
-      <MapContext.Provider value={{ mapLat, setMapLat, mapLon, setMapLon }}>
+    <div className="App" >
+      <MapContext.Provider value={{ mapLat, setMapLat, mapLon, setMapLon }} >
         <Box
           // columnspacing={5}
           style={{

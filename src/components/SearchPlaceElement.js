@@ -10,6 +10,7 @@ import { MapContext } from "../App";
 import { cityAutocomplete, fetchWeather, geocodeCity } from "../api";
 import WeatherInfoCard from "./WeatherInfoCard";
 
+
 function SearchPlaceElement() {
   const [weather, setWeather] = useState({});
   const [city, setCity] = useState({});
@@ -100,7 +101,11 @@ function SearchPlaceElement() {
               fullWidth
             />
           )}
-          sx={{ width: 300, marginTop: 5 }}
+          sx={{
+            width: 300,
+            marginTop: 5,
+            /*backgroundColor: "#734b6d"*/
+          }}
         />
 
         {/* <Button onClick={handleClick}>Hledej</Button> */}

@@ -1,5 +1,18 @@
 .App {
   text-align: center;
+
+}
+
+
+body{
+  /* background-color: #7d2c83; */
+  background-image: linear-gradient(to left, #350770, #B793E4);
+  /* background-image: url(pictures/stars2.jpg);*/
+  /* background-size:cover;  */
+}
+
+.map-container {
+  height: 400px;
 }
 
 .App-logo {

@@ -3,6 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import CardHeader from "@mui/material/CardHeader";
+import "../index.css";
 
 const weatherIcons = {
   "01d": "/weather_icons/animated/day.svg",
@@ -33,23 +34,25 @@ function WeatherInfoCard({ city, weather }) {
           marginLeft: "20px",
           marginRight: "20px",
           marginTop: "20px",
+          "padding-bottom": "20px",
+          // 'background-color': 'rgb(203, 184, 209, 0.2)'
+          backgroundColor: "rgb(198, 212, 224, 0.4)",
+          color: "#ffffff",
         }}
       >
-        <CardContent
-        // currentWeather={currentWeather}
-        >
-          <CardHeader
-            // title={{city?.[0].name} {city?.[0].country}}
-            subheader="Today"
-          />
+        <CardContent sx={{ padding: 0 }}>
+          <div style={{ paddingBottom: "5px", paddingTop: "15px" }}>Today</div>
 
-          <div>
-            {city?.[0].name} {city?.[0].country}
+          <div style={{ fontSize: "24px", fontWeight: "bold" }}>
+            {city?.[0].name}
           </div>
+
+          <div style={{ fontSize: "14px" }}>{city?.[0].country}</div>
+
           <CardMedia
             component="img"
             style={{
-              width: "60%",
+              width: "100px",
               display: "block",
               marginLeft: "auto",
               marginRight: "auto",
@@ -59,9 +62,25 @@ function WeatherInfoCard({ city, weather }) {
           />
         </CardContent>
 
-        <div>{weather?.weather?.[0]?.description}</div>
-        <div>Temperature: {weather?.main?.temp} °C</div>
-        <div>Feels like: {weather?.main?.feels_like} °C</div>
+        <div style={{ paddingBottom: "5px" }}>
+          <span style={{ fontSize: "18px" }}>
+            {weather?.weather?.[0]?.description}
+          </span>
+        </div>
+        <div style={{ paddingBottom: "2px" }}>
+          Temperature:{" "}
+          <span style={{ fontSize: "28px", fontWeight: "bold" }}>
+            {Math.round(weather?.main?.temp)}
+          </span>{" "}
+          °C
+        </div>
+        <div>
+          Feels like:{" "}
+          <span style={{ fontSize: "20px" }}>
+            {Math.round(weather?.main?.feels_like)}
+          </span>{" "}
+          °C
+        </div>
       </Card>
     </>
   );
