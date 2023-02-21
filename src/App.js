@@ -25,8 +25,8 @@ function App() {
   const [mapLat, setMapLat] = useState(50.0755);
 
   return (
-    <div className="App" >
-      <MapContext.Provider value={{ mapLat, setMapLat, mapLon, setMapLon }} >
+    <div className="App">
+      <MapContext.Provider value={{ mapLat, setMapLat, mapLon, setMapLon }}>
         <Box
           // columnspacing={5}
           style={{
