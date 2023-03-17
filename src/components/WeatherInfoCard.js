@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import CardHeader from "@mui/material/CardHeader";
 import "../index.css";
 
 const weatherIcons = {
@@ -34,7 +33,7 @@ function WeatherInfoCard({ city, weather }) {
           marginLeft: "20px",
           marginRight: "20px",
           marginTop: "20px",
-          "padding-bottom": "20px",
+          paddingBottom: "20px",
           // 'background-color': 'rgb(203, 184, 209, 0.2)'
           backgroundColor: "rgb(198, 212, 224, 0.4)",
           color: "#ffffff",
